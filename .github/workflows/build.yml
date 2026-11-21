@@ -1,0 +1,37 @@
+name: Build VYRNTH
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: '3.9.9'
+
+      - name: Build VYRNTH
+        run: mvn -B -f vyrnth/pom.xml clean package
+
+      - name: Upload VYRNTH JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: VYRNTH-JAR
+          path: vyrnth/target/VYRNTH-0.7.0.jar
+          if-no-files-found: error
