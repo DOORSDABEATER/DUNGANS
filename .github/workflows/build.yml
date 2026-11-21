@@ -1,3 +1,4 @@
+
 name: Build VYRNTH
 
 on:
@@ -19,7 +20,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven
+
+      - name: Extract VYRNTH source
+        run: |
+          unzip -q vyrnth-0.7.0-full.zip -d .
+          test -f vyrnth/pom.xml
 
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
@@ -35,3 +40,4 @@ jobs:
           name: VYRNTH-JAR
           path: vyrnth/target/VYRNTH-0.7.0.jar
           if-no-files-found: error
+          
